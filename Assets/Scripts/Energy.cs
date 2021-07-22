@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Energy : MonoBehaviour
 {
-    public Texture2D energyBar;
-    public Texture2D energy;
+    [SerializeField] private Texture2D energyBar;
+    [SerializeField] private Texture2D energy;
     public static float energyLenghth = 200.0f;
     private void OnGUI()
     {

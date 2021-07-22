@@ -3,7 +3,7 @@ using UnityEngine;
 public class Lamp : MonoBehaviour
 {
     [SerializeField] private GameObject _lamp;
-    private bool _lampwork = false;
+    private bool _lampwork;
 
     private void Start()
     {
