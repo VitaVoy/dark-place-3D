@@ -5,23 +5,44 @@ using UnityEngine.AI;
 
 public class WayPointPatrol : MonoBehaviour
 {
-    public NavMeshAgent navMeshAgent;
-    public Transform[] _waypoints;
+    public List<Transform> waypoints = new List<Transform>();
+    private Transform _targetWaypoint;
+    private int _targetWaypointIndex;
+    private float _pointDistance = 0.1f;
+    private float _lastWaypointIndex;
+    private float _speed = 0.3f;
 
-
-    int _CurrentWaypointIndex;      
-
-    void Start()
+    private void Start()
     {
-        navMeshAgent.SetDestination(_waypoints[0].position);
+        _targetWaypoint = waypoints[_targetWaypointIndex];
+        _lastWaypointIndex = waypoints.Count - 1;
     }
 
-    void Update()
+    private void Update()
     {
-        if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
+        float _movementStep = _speed * Time.deltaTime;
+
+        float _distance = Vector3.Distance(transform.position, _targetWaypoint.position);
+        CheckDistanceToWaypoint(_distance);
+
+        transform.position = Vector3.MoveTowards(transform.position, _targetWaypoint.position, _movementStep);
+    }
+
+    private void CheckDistanceToWaypoint(float _currentDisance)
+    {
+        if (_currentDisance <= _pointDistance)
         {
-            _CurrentWaypointIndex = (_CurrentWaypointIndex + 1) % _waypoints.Length;
-            navMeshAgent.SetDestination(_waypoints[_CurrentWaypointIndex].position);
+            _targetWaypointIndex++;
+            UpdateTargetWaypoint();
         }
+    }
+
+    private void UpdateTargetWaypoint()
+    {
+        if (_targetWaypointIndex > _lastWaypointIndex)
+        {
+            _targetWaypointIndex = 0;
+        }
+        _targetWaypoint = waypoints[_targetWaypointIndex];
     }
 }
